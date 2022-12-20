@@ -114,5 +114,26 @@ class MagasinTest {
         assertEquals("Pass VIP Concert, -1, 0", app.items[0].toString());
     }
 
+    // TESTS NOUVELLE FONCTIONNALITE
+    @Test
+    // Les produits "Pouvoirs magiques" se dégradent 2 fois plus vite que les objets normaux
+    // Ici Nom item : Pouvoirs magiques, SellIn : de 4 à 3, Quality : de 20 à 18 (-2)
+    void testPouvoirsMagiquesSellInMore0() {
+        Item[] items = new Item[] { new Item("Pouvoirs magiques", 4, 20)};
+        Magasin app = new Magasin(items);
+        app.updateQuality();
+        System.out.println(app.items[0]);
+        assertEquals("Pouvoirs magiques, 3, 18", app.items[0].toString());
+    }
 
+    @Test
+    // Les produits "Pouvoirs magiques" se dégradent 2 fois plus vite que les objets normaux
+    // Ici Nom item : Pouvoirs magiques, SellIn : de 0 à -1, Quality : de 20 à 16 (-4)
+    void testPouvoirsMagiquesSellInUnder0() {
+        Item[] items = new Item[] { new Item("Pouvoirs magiques", 0, 20)};
+        Magasin app = new Magasin(items);
+        app.updateQuality();
+        System.out.println(app.items[0]);
+        assertEquals("Pouvoirs magiques, -1, 16", app.items[0].toString());
+    }
 }
