@@ -16,6 +16,64 @@ class MagasinTest {
         assertEquals("foo", app.items[0].name);
     }
 
+    @Test// Item se dégrade 2 fois plus vite après date de péremption
+    void testClassicItemPeremptionPast0(){
+        Item[] items = new Item[] {new Item("Patate", 0, 10)};
+        Magasin app = new Magasin(items);
+        app.updateQuality();
+        System.out.println(app.items[0]);
+        assertEquals("Patate, -1, 8", app.items[0].toString());
+    }
+
+    @Test
+    // Un produit ne peut jamais avoir une qualité négative (inférieur à 0)
+    void testClassicItemQualityInferieur0(){
+        Item[] items = new Item[] {new Item("Pizza", 10, 2)};
+        Magasin app = new Magasin(items);
+        for (int i = 0; i < 3; i++){
+            app.updateQuality();
+            System.out.println(app.items[0]);
+        }
+        assertEquals("Pizza, 7, 0", app.items[0].toString());
+    }
+
+    @Test
+        // Un produit ne peut jamais avoir une qualité négative (inférieur à 0)
+    void testKryptonite(){
+        Item[] items = new Item[] {new Item("Kryptonite", 10, 200)};
+        Magasin app = new Magasin(items);
+        for (int i = 0; i < 3; i++){
+            app.updateQuality();
+            System.out.println(app.items[0]);
+        }
+        assertEquals("Kryptonite, 10, 200", app.items[0].toString());
+    }
+
+    @Test
+        // Un produit ne peut pas avoir une qualité supérieur à 50
+        // (ex : le Comté qui augmente sa qualité avec le temps ne peut dépasser 50 de qualité)
+    void testItemComteQualitySup50(){
+        Item[] items = new Item[] {new Item("Comté", 10, 48)};
+        Magasin app = new Magasin(items);
+        for (int i = 0; i < 3; i++){
+            app.updateQuality();
+            System.out.println(app.items[0]);
+        }
+        assertEquals("Comté, 7, 50", app.items[0].toString());
+    }
+
+    @Test
+    // Le comté voit sa qualité augmenté même aprs sa date de péremption (SellIn -1)
+    void testItemComteQualitySellInUnder0(){
+        Item[] items = new Item[] {new Item("Comté", -1, 30)};
+        Magasin app = new Magasin(items);
+        for (int i = 0; i < 3; i++){
+            app.updateQuality();
+            System.out.println(app.items[0]);
+        }
+        assertEquals("Comté, -4, 36", app.items[0].toString());
+    }
+
     //TESTS PASS VIP CONCERT
     @Test
     // 1) SpellIn entre 50 et 10 == Quality +1
@@ -56,26 +114,5 @@ class MagasinTest {
         assertEquals("Pass VIP Concert, -1, 0", app.items[0].toString());
     }
 
-    @Test
-    // Item se dégrade 2 fois plus vite après date de péremption
-    void testClassicItemPeremptionPast0(){
-        Item[] items = new Item[] {new Item("Patate", 0, 10)};
-        Magasin app = new Magasin(items);
-        app.updateQuality();
-        System.out.println(app.items[0]);
-        assertEquals("Patate, -1, 8", app.items[0].toString());
-    }
 
-    @Test
-    // Un produit ne peut pas avoir une qualité supérieur à 50
-    // (ex : le Comté qui augmente sa qualité avec le temps ne peut dépasser 50 de qualité)
-    void testClassicItemQualitySup50(){
-        Item[] items = new Item[] {new Item("Comté", 10, 48)};
-        Magasin app = new Magasin(items);
-        for (int i = 0; i < 3; i++){
-            app.updateQuality();
-            System.out.println(app.items[0]);
-        }
-        assertEquals("Comté, 7, 50", app.items[0].toString());
-    }
 }
